@@ -2,6 +2,7 @@
 JobLogger = require 'job-logger'
 PooledJobManager = require 'meshblu-core-pooled-job-manager'
 redis = require 'redis'
+RedisNS = require '@octoblu/redis-ns'
 
 class RedisPooledJobManager
   constructor: (options={}) ->
