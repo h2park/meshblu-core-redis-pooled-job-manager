@@ -23,6 +23,12 @@ class RedisPooledJobManager
       jobLogger: @_createJobLogger {jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogSampleRate, jobLogType}
       pool: @_createPool {maxConnections, namespace, redisUri}
 
+  createResponse: (responseQueue, request, callback) =>
+    @jobManager.createResponse responseQueue, request, callback
+
+  do: (requestQueue, responseQueue, request, callback) =>
+    @jobManager.do requestQueue, responseQueue, request, callback
+
   _createJobLogger: ({jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogSampleRate, jobLogType}) =>
     return new JobLogger
       client: redis.createClient jobLogRedisUri
