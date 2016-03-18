@@ -1,0 +1,41 @@
+{
+  "name": "meshblu-core-redis-pooled-job-manager",
+  "version": "1.0.0",
+  "description": "Build a meshblu-core-pooled-job-manager with redis and the job-logger built right in",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul cover _mocha -- -R spec --require coffee-coverage/register-istanbul"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/octoblu/meshblu-core-redis-pooled-job-manager.git"
+  },
+  "keywords": [
+    "meshblu",
+    "job-logger",
+    "redis"
+  ],
+  "author": "Octoblu, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/octoblu/meshblu-core-redis-pooled-job-manager/issues"
+  },
+  "homepage": "https://github.com/octoblu/meshblu-core-redis-pooled-job-manager#readme",
+  "dependencies": {
+    "coffee-script": "^1.10.0",
+    "hiredis": "^0.4.1",
+    "job-manager": "0.0.4",
+    "meshblu-core-pooled-job-manager": "^1.1.0",
+    "redis": "^2.5.2"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coffee-coverage": "^1.0.1",
+    "coffee-script": "^1.10.0",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5",
+    "mocha-istanbul": "^0.2.0",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0"
+  }
+}
