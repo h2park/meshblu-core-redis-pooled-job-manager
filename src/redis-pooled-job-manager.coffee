@@ -1,7 +1,7 @@
 {Pool} = require 'generic-pool'
 JobLogger = require 'job-logger'
 PooledJobManager = require 'meshblu-core-pooled-job-manager'
-redis = require 'redis'
+redis = require 'ioredis'
 RedisNS = require '@octoblu/redis-ns'
 
 class RedisPooledJobManager
@@ -57,7 +57,14 @@ class RedisPooledJobManager
           callback null, client
           callback = null
 
-      destroy: (client) => client.end true
+      destroy: (client) =>
+        if client.quit?
+          client.quit()
+          client.disconnect false
+          return
+
+        client.end true
+        
       validate: (client) => !client.hasError?
 
 module.exports = RedisPooledJobManager
