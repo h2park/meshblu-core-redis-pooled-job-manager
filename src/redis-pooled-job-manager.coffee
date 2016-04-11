@@ -58,13 +58,13 @@ class RedisPooledJobManager
           callback = null
 
       destroy: (client) =>
-        if client.quit?
+        if client.disconnect?
           client.quit()
           client.disconnect false
           return
 
         client.end true
-        
+
       validate: (client) => !client.hasError?
 
 module.exports = RedisPooledJobManager
