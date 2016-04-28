@@ -7,9 +7,10 @@ PooledJobManager = require 'meshblu-core-pooled-job-manager'
 class RedisPooledJobManager
   constructor: (options={}) ->
     {jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogSampleRate, jobLogType} = options
-    {jobTimeoutSeconds, maxConnections, minConnections, namespace, redisUri} = options
+    {jobTimeoutSeconds, maxConnections, minConnections, idleTimeoutMillis, namespace, redisUri} = options
 
     minConnections ?= 1
+    idleTimeoutMillis ?= 60000
 
     throw new Error('RedisPooledJobManager: jobLogIndexPrefix is required') unless jobLogIndexPrefix?
     throw new Error('RedisPooledJobManager: jobLogQueue is required') unless jobLogQueue?
@@ -24,7 +25,7 @@ class RedisPooledJobManager
     @jobManager = new PooledJobManager
       timeoutSeconds: jobTimeoutSeconds
       jobLogger: @_createJobLogger {jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogSampleRate, jobLogType}
-      pool: @_createPool {maxConnections, minConnections, namespace, redisUri}
+      pool: @_createPool {maxConnections, minConnections, idleTimeoutMillis, namespace, redisUri}
 
   createResponse: (responseQueue, request, callback) =>
     @jobManager.createResponse responseQueue, request, callback
@@ -40,10 +41,11 @@ class RedisPooledJobManager
       sampleRate: jobLogSampleRate
       type: jobLogType
 
-  _createPool: ({maxConnections, minConnections, namespace, redisUri}) =>
+  _createPool: ({maxConnections, minConnections, idleTimeoutMillis, namespace, redisUri}) =>
     return new Pool
       max: maxConnections
       min: minConnections
+      idleTimeoutMillis: idleTimeoutMillis
       returnToHead: true # sets connection pool to stack instead of queue behavior
       create: (callback) =>
         client = new RedisNS namespace, redis.createClient(redisUri)
