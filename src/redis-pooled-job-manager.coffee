@@ -1,13 +1,15 @@
-{Pool} = require 'generic-pool'
-JobLogger = require 'job-logger'
+{Pool}           = require 'generic-pool'
+redis            = require 'ioredis'
+RedisNS          = require '@octoblu/redis-ns'
+JobLogger        = require 'job-logger'
 PooledJobManager = require 'meshblu-core-pooled-job-manager'
-redis = require 'ioredis'
-RedisNS = require '@octoblu/redis-ns'
 
 class RedisPooledJobManager
   constructor: (options={}) ->
     {jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogSampleRate, jobLogType} = options
-    {jobTimeoutSeconds, maxConnections, namespace, redisUri} = options
+    {jobTimeoutSeconds, maxConnections, minConnections, namespace, redisUri} = options
+
+    minConnections ?= 1
 
     throw new Error('RedisPooledJobManager: jobLogIndexPrefix is required') unless jobLogIndexPrefix?
     throw new Error('RedisPooledJobManager: jobLogQueue is required') unless jobLogQueue?
@@ -22,7 +24,7 @@ class RedisPooledJobManager
     @jobManager = new PooledJobManager
       timeoutSeconds: jobTimeoutSeconds
       jobLogger: @_createJobLogger {jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogSampleRate, jobLogType}
-      pool: @_createPool {maxConnections, namespace, redisUri}
+      pool: @_createPool {maxConnections, minConnections, namespace, redisUri}
 
   createResponse: (responseQueue, request, callback) =>
     @jobManager.createResponse responseQueue, request, callback
@@ -38,10 +40,10 @@ class RedisPooledJobManager
       sampleRate: jobLogSampleRate
       type: jobLogType
 
-  _createPool: ({maxConnections, namespace, redisUri}) =>
+  _createPool: ({maxConnections, minConnections, namespace, redisUri}) =>
     return new Pool
       max: maxConnections
-      min: 0
+      min: minConnections
       returnToHead: true # sets connection pool to stack instead of queue behavior
       create: (callback) =>
         client = new RedisNS namespace, redis.createClient(redisUri)
