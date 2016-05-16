@@ -46,7 +46,6 @@ class RedisPooledJobManager
       max: maxConnections
       min: minConnections
       idleTimeoutMillis: idleTimeoutMillis
-      returnToHead: true # sets connection pool to stack instead of queue behavior
       create: (callback) =>
         client = new RedisNS namespace, redis.createClient(redisUri)
 
