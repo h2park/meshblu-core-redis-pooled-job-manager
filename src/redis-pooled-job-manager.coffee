@@ -35,7 +35,7 @@ class RedisPooledJobManager
 
   _createJobLogger: ({jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogSampleRate, jobLogType}) =>
     return new JobLogger
-      client: redis.createClient jobLogRedisUri
+      client: redis.createClient jobLogRedisUri, dropBufferSupport: true
       indexPrefix: jobLogIndexPrefix
       jobLogQueue: jobLogQueue
       sampleRate: jobLogSampleRate
@@ -47,7 +47,7 @@ class RedisPooledJobManager
       min: minConnections
       idleTimeoutMillis: idleTimeoutMillis
       create: (callback) =>
-        client = new RedisNS namespace, redis.createClient(redisUri)
+        client = new RedisNS namespace, redis.createClient(redisUri, dropBufferSupport: true)
 
         client.on 'end', ->
           client.hasError = new Error 'ended'
