@@ -25,7 +25,7 @@ describe 'RedisPooledJobManager', ->
       options =
         jobLogIndexPrefix: 'meshblu'
         jobLogQueue: 'this-queue'
-        jobLogRedisUri: 'redis://other.host:6379'
+        jobLogRedisUri: 'redis://localhost:6379'
 
       expect(=> new RedisPooledJobManager options).to.throw 'RedisPooledJobManager: jobLogSampleRate is required'
 
@@ -34,7 +34,7 @@ describe 'RedisPooledJobManager', ->
       options =
         jobLogIndexPrefix: 'meshblu'
         jobLogQueue: 'this-queue'
-        jobLogRedisUri: 'redis://other.host:6379'
+        jobLogRedisUri: 'redis://localhost:6379'
         jobLogSampleRate: 0
 
       expect(=> new RedisPooledJobManager options).to.throw 'RedisPooledJobManager: jobLogType is required'
@@ -44,7 +44,7 @@ describe 'RedisPooledJobManager', ->
       options =
         jobLogIndexPrefix: 'meshblu'
         jobLogQueue: 'this-queue'
-        jobLogRedisUri: 'redis://other.host:6379'
+        jobLogRedisUri: 'redis://localhost:6379'
         jobLogSampleRate: 0
         jobLogType: 'the-type'
 
@@ -55,7 +55,7 @@ describe 'RedisPooledJobManager', ->
       options =
         jobLogIndexPrefix: 'meshblu'
         jobLogQueue: 'this-queue'
-        jobLogRedisUri: 'redis://other.host:6379'
+        jobLogRedisUri: 'redis://localhost:6379'
         jobLogSampleRate: 0
         jobLogType: 'the-type'
         jobTimeoutSeconds: 3
@@ -66,7 +66,7 @@ describe 'RedisPooledJobManager', ->
       options =
         jobLogIndexPrefix: 'meshblu'
         jobLogQueue: 'this-queue'
-        jobLogRedisUri: 'redis://other.host:6379'
+        jobLogRedisUri: 'redis://localhost:6379'
         jobLogSampleRate: 0
         jobLogType: 'the-type'
         jobTimeoutSeconds: 3
@@ -78,7 +78,7 @@ describe 'RedisPooledJobManager', ->
       options =
         jobLogIndexPrefix: 'meshblu'
         jobLogQueue: 'this-queue'
-        jobLogRedisUri: 'redis://other.host:6379'
+        jobLogRedisUri: 'redis://localhost:6379'
         jobLogSampleRate: 0
         jobLogType: 'the-type'
         jobTimeoutSeconds: 3
@@ -91,7 +91,7 @@ describe 'RedisPooledJobManager', ->
       options =
         jobLogIndexPrefix: 'meshblu'
         jobLogQueue: 'this-queue'
-        jobLogRedisUri: 'redis://other.host:6379'
+        jobLogRedisUri: 'redis://localhost:6379'
         jobLogSampleRate: 0
         jobLogType: 'the-type'
         jobTimeoutSeconds: 3

@@ -23,8 +23,9 @@ class RedisPooledJobManager
     throw new Error('RedisPooledJobManager: redisUri is required') unless redisUri?
 
     @jobManager = new PooledJobManager
+      jobLogSampleRate: jobLogSampleRate
       timeoutSeconds: jobTimeoutSeconds
-      jobLogger: @_createJobLogger {jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogSampleRate, jobLogType}
+      jobLogger: @_createJobLogger {jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogType}
       pool: @_createPool {maxConnections, minConnections, idleTimeoutMillis, namespace, redisUri}
 
   createResponse: (responseQueue, request, callback) =>
