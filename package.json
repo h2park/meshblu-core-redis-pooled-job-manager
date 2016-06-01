@@ -1,6 +1,6 @@
 {
   "name": "meshblu-core-redis-pooled-job-manager",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Build a meshblu-core-pooled-job-manager with redis and the job-logger built right in",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "generic-pool": "^2.4.1",
     "ioredis": "^2.0.0",
     "job-logger": "^4.1.0",
-    "meshblu-core-pooled-job-manager": "^2.1.0"
+    "meshblu-core-pooled-job-manager": "^2.1.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
