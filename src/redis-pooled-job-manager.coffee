@@ -6,8 +6,19 @@ PooledJobManager = require 'meshblu-core-pooled-job-manager'
 
 class RedisPooledJobManager
   constructor: (options={}) ->
-    {jobLogIndexPrefix, jobLogQueue, jobLogRedisUri, jobLogSampleRate, jobLogType} = options
-    {jobTimeoutSeconds, maxConnections, minConnections, idleTimeoutMillis, namespace, redisUri} = options
+    {
+      jobLogIndexPrefix
+      jobLogQueue
+      jobLogRedisUri
+      jobLogSampleRate
+      jobLogType
+      jobTimeoutSeconds
+      maxConnections
+      minConnections
+      idleTimeoutMillis
+      namespace
+      redisUri
+    } = options
 
     minConnections ?= 1
     idleTimeoutMillis ?= 60000
@@ -42,6 +53,14 @@ class RedisPooledJobManager
       sampleRate: jobLogSampleRate
       type: jobLogType
 
+  _closeClient: (client) =>
+    if client.disconnect?
+      client.quit()
+      client.disconnect false
+      return
+
+    client.end true
+
   _createPool: ({maxConnections, minConnections, idleTimeoutMillis, namespace, redisUri}) =>
     return new Pool
       max: maxConnections
@@ -49,26 +68,18 @@ class RedisPooledJobManager
       idleTimeoutMillis: idleTimeoutMillis
       create: (callback) =>
         client = new RedisNS namespace, redis.createClient(redisUri, dropBufferSupport: true)
+        client.ping (error) =>
+          return callback error if error?
+          client.on 'error', (error) =>
+            @_closeClient client
 
-        client.on 'end', ->
-          client.hasError = new Error 'ended'
-
-        client.on 'error', (error) ->
-          client.hasError = error
-          callback error if callback?
-
-        client.once 'ready', ->
           callback null, client
-          callback = null
 
-      destroy: (client) =>
-        if client.disconnect?
-          client.quit()
-          client.disconnect false
-          return
+      destroy: @_closeClient
 
-        client.end true
-
-      validate: (client) => !client.hasError?
+      validateAsync: (client, callback) =>
+        client.ping (error) =>
+          return callback false if error?
+          callback true
 
 module.exports = RedisPooledJobManager
