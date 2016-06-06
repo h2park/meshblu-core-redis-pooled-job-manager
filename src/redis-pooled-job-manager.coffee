@@ -54,12 +54,17 @@ class RedisPooledJobManager
       type: jobLogType
 
   _closeClient: (client) =>
-    if client.disconnect?
-      client.quit()
-      client.disconnect false
-      return
+    client.on 'error', =>
+      # silently deal with it
+      
+    try
+      if client.disconnect?
+        client.quit()
+        client.disconnect false
+        return
 
-    client.end true
+      client.end true
+    catch
 
   _createPool: ({maxConnections, minConnections, idleTimeoutMillis, namespace, redisUri}) =>
     return new Pool
@@ -70,7 +75,7 @@ class RedisPooledJobManager
         client = new RedisNS namespace, redis.createClient(redisUri, dropBufferSupport: true)
         client.ping (error) =>
           return callback error if error?
-          client.on 'error', (error) =>
+          client.once 'error', (error) =>
             @_closeClient client
 
           callback null, client
