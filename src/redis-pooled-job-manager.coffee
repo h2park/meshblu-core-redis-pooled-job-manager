@@ -1,4 +1,4 @@
-{Pool}           = require 'generic-pool'
+{Pool}           = require '@octoblu/generic-pool'
 redis            = require 'ioredis'
 RedisNS          = require '@octoblu/redis-ns'
 JobLogger        = require 'job-logger'
@@ -56,7 +56,7 @@ class RedisPooledJobManager
   _closeClient: (client) =>
     client.on 'error', =>
       # silently deal with it
-      
+
     try
       if client.disconnect?
         client.quit()
