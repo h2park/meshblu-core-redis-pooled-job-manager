@@ -1,6 +1,6 @@
 {
   "name": "meshblu-core-redis-pooled-job-manager",
-  "version": "2.4.4",
+  "version": "2.4.5",
   "description": "Build a meshblu-core-pooled-job-manager with redis and the job-logger built right in",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "@octoblu/redis-ns": "^1.3.1",
     "coffee-script": "^1.10.0",
     "ioredis": "^2.0.0",
-    "job-logger": "^4.1.0",
+    "job-logger": "^4.2.0",
     "meshblu-core-pooled-job-manager": "^2.2.0"
   },
   "devDependencies": {
